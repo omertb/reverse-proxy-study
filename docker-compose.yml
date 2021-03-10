@@ -12,6 +12,32 @@ services:
       - 80:80
       - 443:443
 
+  nginx-exporter:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_nginx_exporter
+    volumes:
+      - nginx-log:/var/log/nginx
+      - ./nginx_log_exporter.yml:/etc/prometheus-nginxlog-exporter.yml
+    depends_on:
+      - rp-tengine
+    ports:
+      - 4040:4040
+
+  prometheus:
+    restart: always
+    volumes:
+      - prometheus-dir:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    links:
+      - nginx-exporter
+      - rp-tengine
+    ports:
+      - 9090:9090
+    image: prom/prometheus
+
 volumes:
   nginx-storage:
   nginx-log:
+  prometheus-dir:

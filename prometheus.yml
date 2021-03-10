@@ -15,5 +15,5 @@ scrape_configs:
   - job_name: 'vts'
     scrape_interval: 15s
     static_configs:
-      - targets: ['my_nginx:80']
+      - targets: ['rp-tengine:80']
 
