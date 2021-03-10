@@ -20,10 +20,10 @@ services:
     volumes:
       - nginx-log:/var/log/nginx
       - ./nginx_log_exporter.yml:/etc/prometheus-nginxlog-exporter.yml
-    depends_on:
-      - rp-tengine
     ports:
       - 4040:4040
+    depends_on:
+      - rp-tengine
 
   json-exporter:
     restart: always
@@ -49,11 +49,24 @@ services:
       - 9090:9090
     image: prom/prometheus
     depends_on:
-      - rp-tengine
       - nginx-exporter
       - json-exporter
+
+  grafana:
+    restart: always
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    links:
+      - rp-tengine
+      - prometheus
+    ports:
+      - 3000:3000
+    image: grafana/grafana
+    depends_on:
+      - prometheus
 
 volumes:
   nginx-storage:
   nginx-log:
   prometheus-dir:
+  grafana-storage:
