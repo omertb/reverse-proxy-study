@@ -1,0 +1,7 @@
+FROM python
+
+
+RUN pip install requests
+COPY ./json_export.py .
+
+CMD ["python", "json_export.py"]

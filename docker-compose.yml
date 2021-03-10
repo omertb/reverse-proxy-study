@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  rp-tengine:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_tengine
+    volumes:
+      - nginx-storage:/usr/local/nginx
+      - nginx-log:/var/log/nginx
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  nginx-storage:
+  nginx-log:

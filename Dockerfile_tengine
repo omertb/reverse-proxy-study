@@ -1,0 +1,17 @@
+FROM debian:stretch
+
+RUN apt update && apt install -y build-essential zlib1g-dev libpcre3-dev libssl1.0-dev && mkdir /conf
+
+COPY nginx_conf /conf
+COPY nginx-module-vts /usr/src/nginx-module-vts
+COPY nginx_upstream_check_module/ngx_http_upstream_check_module.h /usr/src/nginx-module-vts/src/
+COPY nginx_upstream_check_module/ngx_http_upstream_check_module.c /usr/src/nginx-module-vts/src/
+COPY tengine /usr/src/tengine
+
+WORKDIR /usr/src/tengine/
+RUN ./configure --add-module=/usr/src/nginx-module-vts && make && make install
+
+EXPOSE 80
+EXPOSE 443
+
+CMD ["/usr/local/nginx/sbin/nginx", "-c", "/conf/nginx.conf"]
