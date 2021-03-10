@@ -5,7 +5,7 @@ import requests
 from time import sleep
 
 while True:
-    response = requests.request(url="http://my_nginx/status/format/json", method="GET")
+    response = requests.request(url="http://rp-tengine/status/format/json", method="GET")
     vts_json = json.loads(response.text)
     upstream_servers = vts_json['upstreamZones']['trendyol']
     

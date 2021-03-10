@@ -25,6 +25,18 @@ services:
     ports:
       - 4040:4040
 
+  json-exporter:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_json_exp
+    volumes:
+      - nginx-storage:/usr/local/nginx
+    links:
+      - rp-tengine
+    depends_on:
+      - rp-tengine
+
   prometheus:
     restart: always
     volumes:
@@ -36,6 +48,10 @@ services:
     ports:
       - 9090:9090
     image: prom/prometheus
+    depends_on:
+      - rp-tengine
+      - nginx-exporter
+      - json-exporter
 
 volumes:
   nginx-storage:
